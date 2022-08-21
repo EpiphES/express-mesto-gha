@@ -39,9 +39,22 @@ const updateUserProfile = (req, res) => {
     .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 };
 
+const updateUserAvatar = (req, res) => {
+  const { avatar } = req.body;
+  User.findByIdAndUpdate(req.user._id, { avatar }, { new: true })
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({ massage: 'Пользователь не найден' });
+      }
+      return res.status(200).send({ user });
+    })
+    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+};
+
 module.exports = {
   getUsers,
   getUserById,
   createUser,
   updateUserProfile,
+  updateUserAvatar,
 };
