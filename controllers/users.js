@@ -11,7 +11,10 @@ const getUserById = (req, res) => {
 
   User.findById(userId)
     .then((user) => {
-      res.status(200).send({ user });
+      if (!user) {
+        return res.status(404).send({ massage: 'Пользователь не найден' });
+      }
+      return res.status(200).send({ user });
     })
     .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 };
