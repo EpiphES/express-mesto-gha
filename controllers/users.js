@@ -2,15 +2,17 @@ const User = require('../models/user');
 
 const getUsers = (req, res) => {
   User.find({})
-    .then((users) => res.send({ data: users }))
+    .then((users) => res.status(200).send({ data: users }))
     .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 };
 
 const getUserById = (req, res) => {
   const { userId } = req.params;
 
-  User.find((user) => user._id === userId)
-    .then((user) => res.send({ user }))
+  User.findById(userId)
+    .then((user) => {
+      res.status(200).send({ user });
+    })
     .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 };
 
