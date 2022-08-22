@@ -14,7 +14,10 @@ app.use((req, res, next) => {
 });
 
 app.use('/', router);
-app.use((req, res) => res.status(404).send({ message: 'Страница не найдена' }));
+app.use((req, res) => {
+  const ERROR_CODE = 404;
+  res.status(ERROR_CODE).send({ message: 'Страница не найдена' });
+});
 
 async function main() {
   await mongoose.connect('mongodb://localhost:27017/mestodb', {
