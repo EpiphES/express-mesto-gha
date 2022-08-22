@@ -13,7 +13,7 @@ const createCard = (req, res) => {
   Card.create({ name, link, owner: req.user._id })
     .then((card) => res.status(200).send({ card }))
     .catch((e) => {
-      if (e.name === 'CastError' || e.name === 'ValidationError') {
+      if (e.name === 'ValidationError') {
         return res.status(400).send({ message: 'Ошибка валидации. Переданные данные не корректны' });
       }
       return res.status(500).send({ message: 'Произошла ошибка на сервере' });

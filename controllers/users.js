@@ -28,7 +28,7 @@ const createUser = (req, res) => {
   User.create({ name, about, avatar })
     .then((user) => res.send({ data: user }))
     .catch((e) => {
-      if (e.name === 'CastError' || e.name === 'ValidationError') {
+      if (e.name === 'ValidationError') {
         return res.status(400).send({ message: 'Ошибка валидации. Переданные данные не корректны' });
       }
       return res.status(500).send({ message: 'Произошла ошибка на сервере' });
