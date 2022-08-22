@@ -3,7 +3,7 @@ const Card = require('../models/card');
 const getCards = (req, res) => {
   Card.find({})
     .populate('owner')
-    .then((cards) => res.status(200).send({ cards }))
+    .then((cards) => res.send({ cards }))
     .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 };
 
@@ -11,7 +11,7 @@ const createCard = (req, res) => {
   const { name, link } = req.body;
 
   Card.create({ name, link, owner: req.user._id })
-    .then((card) => res.status(200).send({ card }))
+    .then((card) => res.send({ card }))
     .catch((e) => {
       if (e.name === 'ValidationError') {
         return res.status(400).send({ message: 'Ошибка валидации. Переданные данные не корректны' });
@@ -26,7 +26,7 @@ const deleteCard = (req, res) => {
       if (!card) {
         return res.status(404).send({ message: 'Карточка не найдена' });
       }
-      return res.status(200).send({ card });
+      return res.send({ card });
     })
     .catch((e) => {
       if (e.name === 'CastError') {
@@ -46,7 +46,7 @@ const likeCard = (req, res) => {
       if (!card) {
         return res.status(404).send({ message: 'Карточка не найдена' });
       }
-      return res.status(200).send({ card });
+      return res.send({ card });
     })
     .catch((e) => {
       if (e.name === 'CastError' || e.name === 'ValidationError') {
@@ -66,7 +66,7 @@ const dislikeCard = (req, res) => {
       if (!card) {
         return res.status(404).send({ message: 'Карточка не найдена' });
       }
-      return res.status(200).send({ card });
+      return res.send({ card });
     })
     .catch((e) => {
       if (e.name === 'CastError' || e.name === 'ValidationError') {

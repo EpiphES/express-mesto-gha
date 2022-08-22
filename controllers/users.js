@@ -2,7 +2,7 @@ const User = require('../models/user');
 
 const getUsers = (req, res) => {
   User.find({})
-    .then((users) => res.status(200).send({ data: users }))
+    .then((users) => res.send({ data: users }))
     .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 };
 
@@ -12,7 +12,7 @@ const getUserById = (req, res) => {
       if (!user) {
         return res.status(404).send({ message: 'Пользователь не найден' });
       }
-      return res.status(200).send({ user });
+      return res.send({ user });
     })
     .catch((e) => {
       if (e.name === 'CastError') {
@@ -42,7 +42,7 @@ const updateUserProfile = (req, res) => {
       if (!user) {
         return res.status(404).send({ message: 'Пользователь не найден' });
       }
-      return res.status(200).send({ user });
+      return res.send({ user });
     })
     .catch((e) => {
       if (e.name === 'CastError' || e.name === 'ValidationError') {
@@ -59,7 +59,7 @@ const updateUserAvatar = (req, res) => {
       if (!user) {
         return res.status(404).send({ message: 'Пользователь не найден' });
       }
-      return res.status(200).send({ user });
+      return res.send({ user });
     })
     .catch((e) => {
       if (e.name === 'CastError' || e.name === 'ValidationError') {
