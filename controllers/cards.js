@@ -1,10 +1,14 @@
 const Card = require('../models/card');
 
+let ERROR_CODE = 500;
+
 const getCards = (req, res) => {
   Card.find({})
     .populate('owner')
     .then((cards) => res.send({ cards }))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch(() => res
+      .status(ERROR_CODE)
+      .send({ message: 'Произошла ошибка на сервере' }));
 };
 
 const createCard = (req, res) => {
@@ -14,9 +18,16 @@ const createCard = (req, res) => {
     .then((card) => res.send({ card }))
     .catch((e) => {
       if (e.name === 'ValidationError') {
-        return res.status(400).send({ message: 'Ошибка валидации. Переданные данные не корректны' });
+        ERROR_CODE = 400;
+        return res
+          .status(ERROR_CODE)
+          .send({
+            message: 'Ошибка валидации. Переданные данные не корректны',
+          });
       }
-      return res.status(500).send({ message: 'Произошла ошибка на сервере' });
+      return res
+        .status(ERROR_CODE)
+        .send({ message: 'Произошла ошибка на сервере' });
     });
 };
 
@@ -24,15 +35,23 @@ const deleteCard = (req, res) => {
   Card.findByIdAndDelete(req.params.cardId)
     .then((card) => {
       if (!card) {
-        return res.status(404).send({ message: 'Карточка не найдена' });
+        ERROR_CODE = 404;
+        return res
+          .status(ERROR_CODE)
+          .send({ message: 'Карточка не найдена' });
       }
       return res.send({ card });
     })
     .catch((e) => {
       if (e.name === 'CastError') {
-        return res.status(400).send({ message: 'Ошибка валидации. Переданные данные не корректны' });
+        ERROR_CODE = 400;
+        return res
+          .status(ERROR_CODE)
+          .send({
+            message: 'Ошибка валидации. Переданные данные не корректны',
+          });
       }
-      return res.status(500).send({ message: 'Произошла ошибка на сервере' });
+      return res.status(ERROR_CODE).send({ message: 'Произошла ошибка на сервере' });
     });
 };
 
@@ -44,15 +63,23 @@ const likeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        return res.status(404).send({ message: 'Карточка не найдена' });
+        ERROR_CODE = 404;
+        return res
+          .status(ERROR_CODE)
+          .send({ message: 'Карточка не найдена' });
       }
       return res.send({ card });
     })
     .catch((e) => {
       if (e.name === 'CastError' || e.name === 'ValidationError') {
-        return res.status(400).send({ message: 'Ошибка валидации. Переданные данные не корректны' });
+        ERROR_CODE = 400;
+        return res
+          .status(ERROR_CODE)
+          .send({
+            message: 'Ошибка валидации. Переданные данные не корректны',
+          });
       }
-      return res.status(500).send({ message: 'Произошла ошибка на сервере' });
+      return res.status(ERROR_CODE).send({ message: 'Произошла ошибка на сервере' });
     });
 };
 
@@ -64,15 +91,23 @@ const dislikeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        return res.status(404).send({ message: 'Карточка не найдена' });
+        ERROR_CODE = 404;
+        return res
+          .status(ERROR_CODE)
+          .send({ message: 'Карточка не найдена' });
       }
       return res.send({ card });
     })
     .catch((e) => {
       if (e.name === 'CastError' || e.name === 'ValidationError') {
-        return res.status(400).send({ message: 'Ошибка валидации. Переданные данные не корректны' });
+        ERROR_CODE = 400;
+        return res
+          .status(ERROR_CODE)
+          .send({
+            message: 'Ошибка валидации. Переданные данные не корректны',
+          });
       }
-      return res.status(500).send({ message: 'Произошла ошибка на сервере' });
+      return res.status(ERROR_CODE).send({ message: 'Произошла ошибка на сервере' });
     });
 };
 
