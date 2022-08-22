@@ -1,7 +1,7 @@
 [![Tests](https://github.com/EpiphES/express-mesto-gha/actions/workflows/tests-13-sprint.yml/badge.svg)](https://github.com/EpiphES/express-mesto-gha/actions/workflows/tests-13-sprint.yml) [![Tests](https://github.com/EpiphES/express-mesto-gha/actions/workflows/tests-14-sprint.yml/badge.svg)](https://github.com/EpiphES/express-mesto-gha/actions/workflows/tests-14-sprint.yml)
 # Проект Mesto фронтенд + бэкенд
 
-
+Mesto - oдностраничное приложение для просмотра карточек с изображеними. 
 
 ## Настройка бейджей статуса тестов
 Перед началом работы над проектом рекомендуется исправить бейджи, отражающие статус прохождения тестов.
@@ -20,8 +20,6 @@
 `/controllers` — папка с файлами контроллеров пользователя и карточки   
 `/models` — папка с файлами описания схем пользователя и карточки  
   
-Остальные директории вспомогательные, создаются при необходимости разработчиком
-
 ## Запуск проекта
 
 `npm run start` — запускает сервер   
