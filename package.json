@@ -4,7 +4,7 @@
   "description": "Проект Mesto фронтенд + бэкенд",
   "main": "app.js",
   "scripts": {
-    "lint": "npx eslint",
+    "lint": "npx eslint .",
     "start": "node app.js",
     "dev": "nodemon app.js"
   },
@@ -12,7 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/EpiphES/express-mesto-gha.git"
   },
-  "author": "",
+  "author": "Ekaterina Epifanova",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/EpiphES/express-mesto-gha/issues"
