@@ -1,6 +1,8 @@
 const User = require('../models/user');
 
-let ERROR_CODE = 500;
+const ERROR_CODE = 500;
+const ERROR_DATA_CODE = 400;
+const NOT_FOUND_CODE = 404;
 
 const getUsers = (req, res) => {
   User.find({})
@@ -12,19 +14,19 @@ const getUserById = (req, res) => {
   User.findById(req.params.userId)
     .then((user) => {
       if (!user) {
-        ERROR_CODE = 404;
         return res
-          .status(ERROR_CODE)
+          .status(NOT_FOUND_CODE)
           .send({ message: 'Пользователь не найден' });
       }
       return res.send({ user });
     })
     .catch((e) => {
       if (e.name === 'CastError') {
-        ERROR_CODE = 400;
         return res
-          .status(ERROR_CODE)
-          .send({ message: 'Ошибка валидации. Переданные данные не корректны' });
+          .status(ERROR_DATA_CODE)
+          .send({
+            message: 'Ошибка валидации. Переданные данные не корректны',
+          });
       }
       return res
         .status(ERROR_CODE)
@@ -39,9 +41,8 @@ const createUser = (req, res) => {
     .then((user) => res.send({ data: user }))
     .catch((e) => {
       if (e.name === 'ValidationError') {
-        ERROR_CODE = 400;
         return res
-          .status(ERROR_CODE)
+          .status(ERROR_DATA_CODE)
           .send({
             message: 'Ошибка валидации. Переданные данные не корректны',
           });
@@ -57,18 +58,16 @@ const updateUserProfile = (req, res) => {
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
     .then((user) => {
       if (!user) {
-        ERROR_CODE = 404;
         return res
-          .status(ERROR_CODE)
+          .status(NOT_FOUND_CODE)
           .send({ message: 'Пользователь не найден' });
       }
       return res.send({ user });
     })
     .catch((e) => {
       if (e.name === 'CastError' || e.name === 'ValidationError') {
-        ERROR_CODE = 400;
         return res
-          .status(ERROR_CODE)
+          .status(ERROR_DATA_CODE)
           .send({
             message: 'Ошибка валидации. Переданные данные не корректны',
           });
@@ -84,18 +83,16 @@ const updateUserAvatar = (req, res) => {
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
     .then((user) => {
       if (!user) {
-        ERROR_CODE = 404;
         return res
-          .status(ERROR_CODE)
+          .status(NOT_FOUND_CODE)
           .send({ message: 'Пользователь не найден' });
       }
       return res.send({ user });
     })
     .catch((e) => {
       if (e.name === 'CastError' || e.name === 'ValidationError') {
-        ERROR_CODE = 400;
         return res
-          .status(ERROR_CODE)
+          .status(ERROR_DATA_CODE)
           .send({
             message: 'Ошибка валидации. Переданные данные не корректны',
           });

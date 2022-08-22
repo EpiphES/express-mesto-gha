@@ -1,6 +1,8 @@
 const Card = require('../models/card');
 
-let ERROR_CODE = 500;
+const ERROR_CODE = 500;
+const ERROR_DATA_CODE = 400;
+const NOT_FOUND_CODE = 404;
 
 const getCards = (req, res) => {
   Card.find({})
@@ -18,9 +20,8 @@ const createCard = (req, res) => {
     .then((card) => res.send({ card }))
     .catch((e) => {
       if (e.name === 'ValidationError') {
-        ERROR_CODE = 400;
         return res
-          .status(ERROR_CODE)
+          .status(ERROR_DATA_CODE)
           .send({
             message: 'Ошибка валидации. Переданные данные не корректны',
           });
@@ -35,18 +36,16 @@ const deleteCard = (req, res) => {
   Card.findByIdAndDelete(req.params.cardId)
     .then((card) => {
       if (!card) {
-        ERROR_CODE = 404;
         return res
-          .status(ERROR_CODE)
+          .status(NOT_FOUND_CODE)
           .send({ message: 'Карточка не найдена' });
       }
       return res.send({ card });
     })
     .catch((e) => {
       if (e.name === 'CastError') {
-        ERROR_CODE = 400;
         return res
-          .status(ERROR_CODE)
+          .status(ERROR_DATA_CODE)
           .send({
             message: 'Ошибка валидации. Переданные данные не корректны',
           });
@@ -63,18 +62,16 @@ const likeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        ERROR_CODE = 404;
         return res
-          .status(ERROR_CODE)
+          .status(NOT_FOUND_CODE)
           .send({ message: 'Карточка не найдена' });
       }
       return res.send({ card });
     })
     .catch((e) => {
       if (e.name === 'CastError' || e.name === 'ValidationError') {
-        ERROR_CODE = 400;
         return res
-          .status(ERROR_CODE)
+          .status(ERROR_DATA_CODE)
           .send({
             message: 'Ошибка валидации. Переданные данные не корректны',
           });
@@ -91,18 +88,16 @@ const dislikeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        ERROR_CODE = 404;
         return res
-          .status(ERROR_CODE)
+          .status(NOT_FOUND_CODE)
           .send({ message: 'Карточка не найдена' });
       }
       return res.send({ card });
     })
     .catch((e) => {
       if (e.name === 'CastError' || e.name === 'ValidationError') {
-        ERROR_CODE = 400;
         return res
-          .status(ERROR_CODE)
+          .status(ERROR_DATA_CODE)
           .send({
             message: 'Ошибка валидации. Переданные данные не корректны',
           });
