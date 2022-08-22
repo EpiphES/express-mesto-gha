@@ -24,7 +24,7 @@ const deleteCard = (req, res) => {
   Card.findByIdAndDelete(req.params.cardId)
     .then((card) => {
       if (!card) {
-        return res.status(404).send({ massage: 'Карточка не найдена' });
+        return res.status(404).send({ message: 'Карточка не найдена' });
       }
       return res.status(200).send({ card });
     })
@@ -44,7 +44,7 @@ const likeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        return res.status(404).send({ massage: 'Карточка не найдена' });
+        return res.status(404).send({ message: 'Карточка не найдена' });
       }
       return res.status(200).send({ card });
     })
@@ -64,7 +64,7 @@ const dislikeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        return res.status(404).send({ massage: 'Карточка не найдена' });
+        return res.status(404).send({ message: 'Карточка не найдена' });
       }
       return res.status(200).send({ card });
     })
