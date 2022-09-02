@@ -2,8 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
-const ERROR_CODE = 500;
-const ERROR_DATA_CODE = 400;
+const ERROR_CODE = 500; const ERROR_DATA_CODE = 400;
 const NOT_FOUND_CODE = 404;
 
 const getUsers = (req, res) => {

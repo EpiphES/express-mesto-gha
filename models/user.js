@@ -6,8 +6,8 @@ const userSchema = new mongoose.Schema({
   name: {
     type: String,
     default: 'Жак-Ив Кусто',
-    minlength: 2,
-    maxlength: 30,
+    minlength: [2, 'Минимальная длина поля "name" - 2'],
+    maxlength: [30, 'Максимальная длина поля "name" - 30'],
   },
   about: {
     type: String,
@@ -28,15 +28,14 @@ const userSchema = new mongoose.Schema({
       },
       message: 'Введите правильный email',
     },
-    required: true,
+    required: [true, 'Поле "email" должно быть заполнено'],
     unique: true,
   },
   password: {
     type: String,
-    required: true,
-    minlength: 8,
+    required: [true, 'Поле "password" должно быть заполнено'],
   },
-});
+}, { versionKey: false });
 
 userSchema.statics.findUserByCredentials = function findUserByCredentials(email, password) {
   return this.findOne({ email })
@@ -44,13 +43,11 @@ userSchema.statics.findUserByCredentials = function findUserByCredentials(email,
       if (!user) {
         return Promise.reject(new Error('Неправильные почта или пароль'));
       }
-
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
             return Promise.reject(new Error('Неправильные почта или пароль'));
           }
-
           return user;
         });
     });
