@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 
 const ERROR_CODE = 500;
@@ -22,11 +23,9 @@ const getUserById = (req, res) => {
     })
     .catch((e) => {
       if (e.name === 'CastError') {
-        return res
-          .status(ERROR_DATA_CODE)
-          .send({
-            message: 'Ошибка валидации. Переданные данные не корректны',
-          });
+        return res.status(ERROR_DATA_CODE).send({
+          message: 'Ошибка валидации. Переданные данные не корректны',
+        });
       }
       return res
         .status(ERROR_CODE)
@@ -35,27 +34,36 @@ const getUserById = (req, res) => {
 };
 
 const createUser = (req, res) => {
-  const { name, about, avatar } = req.body;
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
 
-  User.create({ name, about, avatar })
-    .then((user) => res.send({ data: user }))
+  bcrypt.hash(password, 10)
+    .then((hash) => User.create({
+      name,
+      about,
+      avatar,
+      email,
+      password: hash,
+    }))
+    .then((user) => res.send({ user }))
     .catch((e) => {
       if (e.name === 'ValidationError') {
-        return res
-          .status(ERROR_DATA_CODE)
-          .send({
-            message: 'Ошибка валидации. Переданные данные не корректны',
-          });
+        return res.status(ERROR_DATA_CODE).send({
+          message: 'Ошибка валидации. Переданные данные не корректны',
+        });
       }
-      return res
-        .status(ERROR_CODE)
-        .send({ message: 'Произошла ошибка на сервере' });
+      return res.status(ERROR_CODE).send({ message: 'Произошла ошибка на сервере' });
     });
 };
 
 const updateUserProfile = (req, res) => {
   const { name, about } = req.body;
-  User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
+  User.findByIdAndUpdate(
+    req.user._id,
+    { name, about },
+    { new: true, runValidators: true },
+  )
     .then((user) => {
       if (!user) {
         return res
@@ -66,11 +74,9 @@ const updateUserProfile = (req, res) => {
     })
     .catch((e) => {
       if (e.name === 'CastError' || e.name === 'ValidationError') {
-        return res
-          .status(ERROR_DATA_CODE)
-          .send({
-            message: 'Ошибка валидации. Переданные данные не корректны',
-          });
+        return res.status(ERROR_DATA_CODE).send({
+          message: 'Ошибка валидации. Переданные данные не корректны',
+        });
       }
       return res
         .status(ERROR_CODE)
@@ -80,7 +86,11 @@ const updateUserProfile = (req, res) => {
 
 const updateUserAvatar = (req, res) => {
   const { avatar } = req.body;
-  User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
+  User.findByIdAndUpdate(
+    req.user._id,
+    { avatar },
+    { new: true, runValidators: true },
+  )
     .then((user) => {
       if (!user) {
         return res
@@ -91,15 +101,37 @@ const updateUserAvatar = (req, res) => {
     })
     .catch((e) => {
       if (e.name === 'CastError' || e.name === 'ValidationError') {
-        return res
-          .status(ERROR_DATA_CODE)
-          .send({
-            message: 'Ошибка валидации. Переданные данные не корректны',
-          });
+        return res.status(ERROR_DATA_CODE).send({
+          message: 'Ошибка валидации. Переданные данные не корректны',
+        });
       }
       return res
         .status(ERROR_CODE)
         .send({ message: 'Произошла ошибка на сервере' });
+    });
+};
+
+const login = (req, res) => {
+  const { email, password } = req.body;
+
+  User.findOne({ email })
+    .then((user) => {
+      if (!user) {
+        return Promise.reject(new Error('Неправильные почта или пароль'));
+      }
+
+      return bcrypt.compare(password, user.password);
+    })
+    .then((matched) => {
+      if (!matched) {
+        return Promise.reject(new Error('Неправильные почта или пароль'));
+      }
+      return res.send({ message: 'Всё верно!' });
+    })
+    .catch((err) => {
+      res
+        .status(401)
+        .send({ message: err.message });
     });
 };
 
@@ -109,4 +141,5 @@ module.exports = {
   createUser,
   updateUserProfile,
   updateUserAvatar,
+  login,
 };
