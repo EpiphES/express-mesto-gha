@@ -40,6 +40,12 @@ const deleteCard = (req, res) => {
           .status(NOT_FOUND_CODE)
           .send({ message: 'Карточка не найдена' });
       }
+
+      if (card.owner._id.toString() !== req.user._id) {
+        return res
+          .status('403')
+          .send({ message: 'Нельзя удалить чужую карточку' });
+      }
       return res.send({ card });
     })
     .catch((e) => {
