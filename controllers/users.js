@@ -2,7 +2,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
-const ERROR_CODE = 500; const ERROR_DATA_CODE = 400;
+const ERROR_CODE = 500;
+const ERROR_DATA_CODE = 400;
 const NOT_FOUND_CODE = 404;
 
 const getUsers = (req, res) => {
@@ -13,6 +14,28 @@ const getUsers = (req, res) => {
 
 const getUserById = (req, res) => {
   User.findById(req.params.userId)
+    .then((user) => {
+      if (!user) {
+        return res
+          .status(NOT_FOUND_CODE)
+          .send({ message: 'Пользователь не найден' });
+      }
+      return res.send({ user });
+    })
+    .catch((e) => {
+      if (e.name === 'CastError') {
+        return res.status(ERROR_DATA_CODE).send({
+          message: 'Ошибка валидации. Переданные данные не корректны',
+        });
+      }
+      return res
+        .status(ERROR_CODE)
+        .send({ message: 'Произошла ошибка на сервере' });
+    });
+};
+
+const getCurrentUser = (req, res) => {
+  User.findById(req.user._id)
     .then((user) => {
       if (!user) {
         return res
@@ -113,10 +136,13 @@ const updateUserAvatar = (req, res) => {
 
 const login = (req, res) => {
   const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status('403').send({ massage: 'Поля должны быть заполнены' });
+  }
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
+      const token = jwt.sign({ _id: user._id }, 'SECRET');
       res.cookie('jwt', token, {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,
@@ -134,6 +160,7 @@ const login = (req, res) => {
 module.exports = {
   getUsers,
   getUserById,
+  getCurrentUser,
   createUser,
   updateUserProfile,
   updateUserAvatar,
