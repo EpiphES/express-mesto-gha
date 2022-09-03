@@ -4,7 +4,7 @@ const auth = (req, res, next) => {
   const token = req.cookies.jwt;
   let payload;
   try {
-    payload = jwt.verify(token, process.env.JWT_SECRET);
+    payload = jwt.verify(token, 'SECRET');
   } catch (err) {
     next(err);
   }
@@ -12,4 +12,4 @@ const auth = (req, res, next) => {
   next();
 };
 
-module.exports = { auth };
+module.exports = auth;
