@@ -4,7 +4,7 @@ const router = express.Router();
 const userRouter = require('./users');
 const cardRouter = require('./cards');
 const { login, createUser } = require('../controllers/users');
-const { auth } = require('../middlewares/auth');
+const auth = require('../middlewares/auth');
 
 const NOT_FOUND_CODE = 404;
 
