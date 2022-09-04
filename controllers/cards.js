@@ -36,9 +36,9 @@ const deleteCard = (req, res, next) => {
       if (card.owner._id.toString() !== req.user._id) {
         throw new ForbiddenError('Нельзя удалить чужую карточку');
       }
-      Card.deleteOne({ _id: card._id });
-      return res.send({ data: card });
+      Card.findByIdAndDelete(req.params.cardId);
     })
+    .then((card) => res.send({ data: card }))
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new BadRequestError('Переданные данные не корректны'));
