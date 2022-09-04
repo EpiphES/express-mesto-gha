@@ -50,10 +50,6 @@ const createUser = (req, res, next) => {
     name, about, avatar, email, password,
   } = req.body;
 
-  if (!email || !password) {
-    throw new BadRequestError('Поля "email"  и "password" должны быть заполнены');
-  }
-
   bcrypt.hash(password, 10)
     .then((hash) => User.create({
       name,
@@ -117,9 +113,6 @@ const updateUserAvatar = (req, res, next) => {
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
-  if (!email || !password) {
-    throw new BadRequestError('Поля "email"  и "password" должны быть заполнены');
-  }
 
   User.findUserByCredentials(email, password)
     .then((user) => {
