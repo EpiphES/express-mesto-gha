@@ -1,13 +1,21 @@
 [![Tests](https://github.com/EpiphES/express-mesto-gha/actions/workflows/tests-13-sprint.yml/badge.svg)](https://github.com/EpiphES/express-mesto-gha/actions/workflows/tests-13-sprint.yml) [![Tests](https://github.com/EpiphES/express-mesto-gha/actions/workflows/tests-14-sprint.yml/badge.svg)](https://github.com/EpiphES/express-mesto-gha/actions/workflows/tests-14-sprint.yml)
 # Проект Mesto фронтенд + бэкенд
 
-Mesto - oдностраничное приложение для просмотра карточек с изображеними.
+Студенческий проект, выполненный в рамках обучения по программе **"Веб-разработчик"** на образовательной платформе [ЯндексПрактикум](https://practicum.yandex.ru/). Демонстрирует навыки разработки бэкенда на Node.js, Express и MongoDB.
 
-## Директории
+---
 
-`/routes` — папка с файлами роутера  
-`/controllers` — папка с файлами контроллеров пользователя и карточки   
-`/models` — папка с файлами описания схем пользователя и карточки  
+## О проекте
+
+Mesto - одностраничное приложение (SPA), в котором пользователи могут делиться фотографиями из путешествий (аналог популярной соцсети). 
+
+## Технологии
+
+- Node.js
+- Express
+- MongoDB
+
+---
   
 ## Запуск проекта
 
