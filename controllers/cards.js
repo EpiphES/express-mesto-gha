@@ -6,7 +6,13 @@ const {
   NotFoundError,
 } = require('../errors');
 
-const getCards = (req, res, next) => {
+const {
+  cardNotFoundMessage,
+  badRequestMessage,
+  forbiddenCardDeleteMessage,
+} = require('../utils/constants');
+
+const getCards = (_req, res, next) => {
   Card.find({})
     .populate('owner')
     .then((cards) => res.send({ data: cards }))
@@ -20,7 +26,7 @@ const createCard = (req, res, next) => {
     .then((card) => res.send({ data: card }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return next(new BadRequestError('Переданные данные не корректны'));
+        return next(new BadRequestError(badRequestMessage));
       }
       return next(err);
     });
@@ -30,24 +36,24 @@ const deleteCard = (req, res, next) => {
   Card.findById(req.params.cardId)
     .then((card) => {
       if (!card) {
-        throw new NotFoundError('Карточка не найдена');
+        throw new NotFoundError(cardNotFoundMessage);
       }
 
       if (card.owner._id.toString() !== req.user._id) {
-        throw new ForbiddenError('Нельзя удалить чужую карточку');
+        throw new ForbiddenError(forbiddenCardDeleteMessage);
       }
       Card.findByIdAndDelete(req.params.cardId)
         .then((mycard) => res.send({ data: mycard }))
         .catch((err) => {
           if (err.name === 'CastError') {
-            return next(new BadRequestError('Переданные данные не корректны'));
+            return next(new BadRequestError(badRequestMessage));
           }
           return next(err);
         });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return next(new BadRequestError('Переданные данные не корректны'));
+        return next(new BadRequestError(badRequestMessage));
       }
       return next(err);
     });
@@ -61,13 +67,13 @@ const likeCard = (req, res, next) => {
   )
     .then((card) => {
       if (!card) {
-        throw new NotFoundError('Карточка не найдена');
+        throw new NotFoundError(cardNotFoundMessage);
       }
       return res.send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
-        return next(new BadRequestError('Переданные данные не корректны'));
+        return next(new BadRequestError(badRequestMessage));
       }
       return next(err);
     });
@@ -81,13 +87,13 @@ const dislikeCard = (req, res, next) => {
   )
     .then((card) => {
       if (!card) {
-        throw new NotFoundError('Карточка не найдена');
+        throw new NotFoundError(cardNotFoundMessage);
       }
       return res.send({ card });
     })
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
-        return next(new BadRequestError('Переданные данные не корректны'));
+        return next(new BadRequestError(badRequestMessage));
       }
       return next(err);
     });

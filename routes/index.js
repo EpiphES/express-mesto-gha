@@ -1,13 +1,13 @@
 const express = require('express');
 const { celebrate, Joi } = require('celebrate');
+const { NotFoundError } = require('../errors');
+const { pageNotFoundMessage, urlRegex } = require('../utils/constants');
 
 const router = express.Router();
 const userRouter = require('./users');
 const cardRouter = require('./cards');
 const { login, createUser } = require('../controllers/users');
 const auth = require('../middlewares/auth');
-
-const NOT_FOUND_CODE = 404;
 
 router.post('/signin', celebrate({
   body: Joi.object().keys({
@@ -20,7 +20,7 @@ router.post('/signup', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
-    avatar: Joi.string().pattern(/^http(s)?:\/\/(www\.)?[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]{1,256}\.[a-z]{1,6}\b[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]*$/),
+    avatar: Joi.string().pattern(urlRegex),
     email: Joi.string().required().email(),
     password: Joi.string().required().min(6),
   }),
@@ -30,8 +30,8 @@ router.use(auth);
 
 router.use('/users', userRouter);
 router.use('/cards', cardRouter);
-router.use((req, res) => {
-  res.status(NOT_FOUND_CODE).send({ message: 'Страница не найдена' });
+router.use((req, res, next) => {
+  next(new NotFoundError(pageNotFoundMessage));
 });
 
 module.exports = router;

@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
-const { UnauthorizedError } = require('../errors');
+const { AuthorizationError } = require('../errors');
+const { wrongEmailOrPasswordMessage, urlRegex } = require('../utils/constants');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -22,7 +23,7 @@ const userSchema = new mongoose.Schema({
       'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
     validate: {
       validator(v) {
-        return /^http(s)?:\/\/(www\.)?[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]{1,256}\.[a-z]{1,6}\b[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]*$/.test(v);
+        return urlRegex.test(v);
       },
       message: 'Введите правильный url',
     },
@@ -55,12 +56,12 @@ userSchema.statics.findUserByCredentials = function (email, password) {
   return this.findOne({ email })
     .select('+password')
     .orFail(() => {
-      throw new UnauthorizedError('Неправильные почта или пароль');
+      throw new AuthorizationError(wrongEmailOrPasswordMessage);
     })
     .then((user) => bcrypt.compare(password, user.password)
       .then((matched) => {
         if (!matched) {
-          throw new UnauthorizedError('Неправильные почта или пароль');
+          throw new AuthorizationError(wrongEmailOrPasswordMessage);
         }
         return user;
       }));
