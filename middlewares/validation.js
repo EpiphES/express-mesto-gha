@@ -1,5 +1,8 @@
+const mongoose = require('mongoose');
 const { celebrate, Joi } = require('celebrate');
 const { urlRegex } = require('../utils/constants');
+
+const idValidationMethod = (value, helper) => (mongoose.isValidObjectId(value) ? value : helper.message('Неверный формат Id'));
 
 const signInValidation = celebrate({
   body: Joi.object().keys({
@@ -20,7 +23,7 @@ const signUpValidation = celebrate({
 
 const getUserByIdValidation = celebrate({
   params: Joi.object().keys({
-    userId: Joi.string().alphanum().length(24),
+    userId: Joi.string().custom(idValidationMethod),
   }),
 });
 
@@ -46,19 +49,19 @@ const createCardValidation = celebrate({
 
 const deleteCardValidation = celebrate({
   params: Joi.object().keys({
-    cardId: Joi.string().alphanum().length(24),
+    cardId: Joi.string().custom(idValidationMethod),
   }),
 });
 
 const cardLikeValidation = celebrate({
   params: Joi.object().keys({
-    cardId: Joi.string().alphanum().length(24),
+    cardId: Joi.string().custom((value, helper) => (mongoose.isValidObjectId(value) ? value : helper.message('Неверный формат Id'))),
   }),
 });
 
 const dislikeCardValidation = celebrate({
   params: Joi.object().keys({
-    cardId: Joi.string().alphanum().length(24),
+    cardId: Joi.string().custom(idValidationMethod),
   }),
 });
 
