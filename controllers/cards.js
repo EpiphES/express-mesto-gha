@@ -20,9 +20,9 @@ const createCard = (req, res, next) => {
     .then((card) => res.send({ data: card }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequestError('Переданные данные не корректны'));
+        return next(new BadRequestError('Переданные данные не корректны'));
       }
-      next(err);
+      return next(err);
     });
 };
 
@@ -41,9 +41,9 @@ const deleteCard = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new BadRequestError('Переданные данные не корректны'));
+        return next(new BadRequestError('Переданные данные не корректны'));
       }
-      next(err);
+      return next(err);
     });
 };
 
@@ -61,9 +61,9 @@ const likeCard = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
-        next(new BadRequestError('Переданные данные не корректны'));
+        return next(new BadRequestError('Переданные данные не корректны'));
       }
-      next(err);
+      return next(err);
     });
 };
 
@@ -81,9 +81,9 @@ const dislikeCard = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
-        next(new BadRequestError('Переданные данные не корректны'));
+        return next(new BadRequestError('Переданные данные не корректны'));
       }
-      next(err);
+      return next(err);
     });
 };
 

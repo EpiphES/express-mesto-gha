@@ -39,9 +39,9 @@ const getUserById = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new BadRequestError('Переданные данные не корректны'));
+        return next(new BadRequestError('Переданные данные не корректны'));
       }
-      next(err);
+      return next(err);
     });
 };
 
@@ -61,11 +61,12 @@ const createUser = (req, res, next) => {
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequestError('Переданные данные не корректны'));
-      } else if (err.code === 11000) {
-        next(new ConflictingRequestError('Такой email уже зарегистрирован'));
+        return next(new BadRequestError('Переданные данные не корректны'));
       }
-      next(err);
+      if (err.code === 11000) {
+        return next(new ConflictingRequestError('Такой email уже зарегистрирован'));
+      }
+      return next(err);
     });
 };
 
@@ -84,9 +85,9 @@ const updateUserProfile = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
-        next(new BadRequestError('Переданные данные не корректны'));
+        return next(new BadRequestError('Переданные данные не корректны'));
       }
-      next(err);
+      return next(err);
     });
 };
 
@@ -105,9 +106,9 @@ const updateUserAvatar = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
-        next(new BadRequestError('Переданные данные не корректны'));
+        return next(new BadRequestError('Переданные данные не корректны'));
       }
-      next(err);
+      return next(err);
     });
 };
 
