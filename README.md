@@ -1,5 +1,5 @@
 [![Tests](https://github.com/EpiphES/express-mesto-gha/actions/workflows/tests-13-sprint.yml/badge.svg)](https://github.com/EpiphES/express-mesto-gha/actions/workflows/tests-13-sprint.yml) [![Tests](https://github.com/EpiphES/express-mesto-gha/actions/workflows/tests-14-sprint.yml/badge.svg)](https://github.com/EpiphES/express-mesto-gha/actions/workflows/tests-14-sprint.yml)
-# Проект Mesto фронтенд + бэкенд
+# Проект Mesto - бэкенд
 
 Студенческий проект, выполненный в рамках обучения по программе **"Веб-разработчик"** на образовательной платформе [ЯндексПрактикум](https://practicum.yandex.ru/). Демонстрирует навыки разработки бэкенда на Node.js, Express и MongoDB.
 
